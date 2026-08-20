@@ -17,7 +17,8 @@ const browser = await chromium.launch();
 const page = await browser.newPage();
 page.on('pageerror', e => { throw e; });
 
-await page.goto('http://localhost:8080/merge.html');
+const BASE = process.env.BASE || 'http://localhost:8080';
+await page.goto(`${BASE}/merge.html`);
 await page.setInputFiles('#files', ['/tmp/a.pdf', '/tmp/b.pdf']);
 const [download] = await Promise.all([
   page.waitForEvent('download'),
@@ -28,7 +29,7 @@ const merged = await PDFDocument.load(new Uint8Array((await import('node:fs')).r
 assert.equal(merged.getPageCount(), 5);
 assert.equal(await page.textContent('#status'), 'Done — download started.');
 
-await page.goto('http://localhost:8080/');
+await page.goto(`${BASE}/`);
 await page.screenshot({ path: '/tmp/pdfrage-home.png', fullPage: true });
 
 await browser.close();
