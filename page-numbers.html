@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add page numbers to PDF online free — no upload | PDFRage</title>
+<meta name="description" content="Add page numbers to a PDF without uploading it anywhere. Free, private, runs entirely in your browser.">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{ "imports": { "pdf-lib": "https://esm.sh/pdf-lib@1.17.1" } }</script>
+</head>
+<body>
+<header><a class="logo" href="index.html">PDF<em>Rage</em></a><a href="index.html">All tools</a></header>
+<main>
+  <h1>Add page numbers</h1>
+  <div class="tool">
+    <label>PDF file — numbers are added bottom-center as “page / total”</label>
+    <input type="file" id="file" accept="application/pdf">
+    <button id="go">Number &amp; download</button>
+    <div id="status" class="status"></div>
+  </div>
+  <div class="ad-slot">Ad slot — 728×90</div>
+</main>
+<script type="module">
+import { addPageNumbers } from './pdf-tools.mjs';
+import { download, run } from './ui.js';
+
+document.getElementById('go').onclick = () => run(async () => {
+  const f = document.getElementById('file').files[0];
+  if (!f) throw new Error('Pick a PDF.');
+  download(await addPageNumbers(await f.arrayBuffer()), 'numbered.pdf');
+});
+</script>
+</body>
+</html>

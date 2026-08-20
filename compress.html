@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compress PDF online free — no upload | PDFRage</title>
+<meta name="description" content="Shrink PDF file size for email and upload limits, free and private. Files never leave your browser.">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{ "imports": {
+  "pdf-lib": "https://esm.sh/pdf-lib@1.17.1",
+  "pdfjs-dist": "https://esm.sh/pdfjs-dist@4.10.38"
+} }</script>
+</head>
+<body>
+<header><a class="logo" href="index.html">PDF<em>Rage</em></a><a href="index.html">All tools</a></header>
+<main>
+  <h1>Compress PDF</h1>
+  <div class="tool">
+    <label>PDF file</label>
+    <input type="file" id="file" accept="application/pdf">
+    <label>Quality</label>
+    <select id="quality">
+      <option value="0.75">High (larger file)</option>
+      <option value="0.55" selected>Medium</option>
+      <option value="0.35">Low (smallest file)</option>
+    </select>
+    <button id="go">Compress &amp; download</button>
+    <div id="status" class="status"></div>
+    <p style="font-size:0.85rem;color:#5a5344">Note: pages are re-rendered as images, so text is no longer selectable. Best for scans and image-heavy PDFs.</p>
+  </div>
+  <div class="ad-slot">Ad slot — 728×90</div>
+</main>
+<script type="module">
+// ponytail: rasterize-to-JPEG compression — lossy, drops selectable text.
+// Upgrade path: Ghostscript-WASM for true object-level compression.
+import { PDFDocument } from 'pdf-lib';
+import * as pdfjsLib from 'pdfjs-dist';
+import { download, run, setStatus } from './ui.js';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://esm.sh/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+
+document.getElementById('go').onclick = () => run(async () => {
+  const f = document.getElementById('file').files[0];
+  if (!f) throw new Error('Pick a PDF.');
+  const quality = +document.getElementById('quality').value;
+  const src = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise;
+  const out = await PDFDocument.create();
+
+  for (let i = 1; i <= src.numPages; i++) {
+    setStatus(`Rendering page ${i}/${src.numPages}…`);
+    const page = await src.getPage(i);
+    const viewport = page.getViewport({ scale: 1.5 });
+    const canvas = document.createElement('canvas');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+    const jpegBytes = await (await fetch(canvas.toDataURL('image/jpeg', quality))).arrayBuffer();
+    const img = await out.embedJpg(jpegBytes);
+    const p = out.addPage([viewport.width, viewport.height]);
+    p.drawImage(img, { x: 0, y: 0, width: viewport.width, height: viewport.height });
+  }
+
+  const bytes = await out.save();
+  const saved = Math.round(100 * (1 - bytes.length / f.size));
+  download(bytes, 'compressed.pdf');
+  setStatus(saved > 0 ? `Done — ${saved}% smaller.` : 'Done — file was already well compressed.');
+});
+</script>
+</body>
+</html>

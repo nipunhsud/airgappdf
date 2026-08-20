@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chat with your PDF — AI summaries and Q&amp;A | PDFRage</title>
+<meta name="description" content="Ask questions about any PDF and get instant answers, powered by Claude.">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{ "imports": { "@anthropic-ai/sdk": "https://esm.sh/@anthropic-ai/sdk" } }</script>
+</head>
+<body>
+<header><a class="logo" href="index.html">PDF<em>Rage</em></a><a href="index.html">All tools</a></header>
+<main>
+  <h1>Chat with PDF</h1>
+  <p class="tagline">Bring your own Claude API key — the document goes straight from your browser to the API. We never see it.</p>
+
+  <div id="app" class="tool">
+    <label>Claude API key (stored only in this browser)</label>
+    <input type="password" id="apikey" placeholder="sk-ant-...">
+    <label>PDF file</label>
+    <input type="file" id="file" accept="application/pdf">
+    <div class="chat-log" id="log"></div>
+    <textarea id="question" rows="2" placeholder="Ask anything about the document…"></textarea>
+    <button id="go">Ask</button>
+    <div id="status" class="status"></div>
+  </div>
+</main>
+<footer>The PDF and your question are sent directly from your browser to the Claude API — never to our servers.</footer>
+<script type="module">
+import Anthropic from '@anthropic-ai/sdk';
+import { setStatus } from './ui.js';
+
+const $ = id => document.getElementById(id);
+
+$('apikey').value = localStorage.getItem('apikey') || '';
+$('apikey').onchange = () => localStorage.setItem('apikey', $('apikey').value);
+
+const history = [];
+let docB64 = null;
+let docName = null;
+
+function addMsg(role, text) {
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.textContent = text;
+  $('log').appendChild(div);
+  div.scrollIntoView();
+}
+
+$('go').onclick = async () => {
+  try {
+    const apiKey = $('apikey').value.trim();
+    if (!apiKey) throw new Error('Enter your Claude API key.');
+    const f = $('file').files[0];
+    if (!f) throw new Error('Pick a PDF.');
+    const question = $('question').value.trim();
+    if (!question) throw new Error('Type a question.');
+
+    // (Re)load the document only when it changes; the API takes PDFs directly.
+    if (f.name !== docName) {
+      setStatus('Reading PDF…');
+      const buf = new Uint8Array(await f.arrayBuffer());
+      let bin = '';
+      for (let i = 0; i < buf.length; i += 0x8000)
+        bin += String.fromCharCode(...buf.subarray(i, i + 0x8000));
+      docB64 = btoa(bin);
+      docName = f.name;
+      history.length = 0;
+      $('log').innerHTML = '';
+    }
+
+    addMsg('user', question);
+    $('question').value = '';
+    setStatus('Thinking…');
+
+    const content = history.length
+      ? question
+      : [
+          { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: docB64 } },
+          { type: 'text', text: question },
+        ];
+    history.push({ role: 'user', content });
+
+    const client = new Anthropic({ apiKey, dangerouslyAllowBrowser: true });
+    const response = await client.messages.create({
+      model: 'claude-opus-4-8',
+      max_tokens: 16000,
+      thinking: { type: 'adaptive' },
+      messages: history,
+    });
+
+    history.push({ role: 'assistant', content: response.content });
+    const text = response.content.filter(b => b.type === 'text').map(b => b.text).join('');
+    addMsg('assistant', text || '(no text response)');
+    setStatus('');
+  } catch (e) {
+    setStatus(e.message, true);
+  }
+};
+</script>
+</body>
+</html>

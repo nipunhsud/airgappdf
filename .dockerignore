@@ -1,0 +1,7 @@
+node_modules
+.git
+docs
+*.md
+test.mjs
+browser-check.mjs
+package*.json
