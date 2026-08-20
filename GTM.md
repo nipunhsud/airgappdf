@@ -1,4 +1,4 @@
-# PDFRage — Go-To-Market: from OSS users to Phase 3 customers
+# AirgapPDF — Go-To-Market: from OSS users to Phase 3 customers
 
 The funnel this doc operates:
 
@@ -41,7 +41,7 @@ The site has no backend, so capture uses hosted forms and repo signals:
   what leaves the browser (nothing except opt-in AI chat), dependency list. This is the
   document a firm's IT person forwards to their boss — make it forwardable. Cost: an
   afternoon. This is the Phase-1-appropriate trust signal; SOC2 is not (see §6).
-- **Self-host guide for regulated networks**: "Deploy PDFRage on an internal server /
+- **Self-host guide for regulated networks**: "Deploy AirgapPDF on an internal server /
   air-gapped network" doc. Ends with the talk-to-us CTA. Self-hosters who read this
   page are the highest-intent visitors the site will ever have.
 - **GitHub as lead surface**: watch issues/discussions for `.gov`, `.law`, health-system
@@ -64,8 +64,8 @@ winnable and pre-qualifies the visitor:
   tools for air-gapped networks" · "What does a BAA cover for document tools?"
   Each answers honestly, then presents the client-side alternative. These are low-volume,
   high-intent queries with weak competition — the opposite profile of "merge pdf".
-- **Comparison pages**: "PDFRage vs Stirling PDF" (zero-server vs self-hosted server),
-  "PDFRage vs iLovePDF" (trust model). Comparison searchers are late-funnel.
+- **Comparison pages**: "AirgapPDF vs Stirling PDF" (zero-server vs self-hosted server),
+  "AirgapPDF vs iLovePDF" (trust model). Comparison searchers are late-funnel.
 - **Lead magnet**: a one-page "Online PDF tool risk checklist" PDF (ironic, effective)
   gated behind the newsletter form. IT people forward checklists.
 
@@ -90,7 +90,7 @@ testimonial). Sequence:
    product is pre-pilot.
 
 **The pilot offer** (bridge from free to Phase 3): "Supported deployment — we install
-PDFRage on your infrastructure, configure it for your team, 90 days of support —
+AirgapPDF on your infrastructure, configure it for your team, 90 days of support —
 $1–2K flat." Small enough to skip procurement at small firms, real enough to prove
 willingness-to-pay, and every pilot generates the case study the next ten sales need.
 
@@ -136,7 +136,7 @@ Track weekly, one row per week in a spreadsheet:
   (responsiveness is a trust signal regulated buyers check) · log metrics row.
 - **Monthly**: 10 warm-network touches (§4.1) · follow up every §2 signal · one
   community post where the ICP lives (r/msp, r/sysadmin, legal-tech forum) that helps
-  first and mentions PDFRage second.
+  first and mentions AirgapPDF second.
 - **Quarterly**: reread this doc against the metrics; kill channels with zero
   hand-raisers after two quarters, double the one that produced any.
 

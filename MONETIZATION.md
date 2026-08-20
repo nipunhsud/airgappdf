@@ -1,4 +1,4 @@
-# PDFRage — Business Plan (revised after market research)
+# AirgapPDF — Business Plan (revised after market research)
 
 Hosting cost is ~$0 (static site, client-side processing), so any revenue is near-pure
 margin. But research (see git history for the full report) showed: head SEO terms are

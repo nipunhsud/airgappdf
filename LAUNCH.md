@@ -11,7 +11,7 @@ works, site deployed on a real domain (GitHub Pages is fine and free).
 
 ## Show HN
 
-**Title:** Show HN: PDFRage – PDF tools with no server, files never leave your browser
+**Title:** Show HN: AirgapPDF – PDF tools with no server, files never leave your browser
 
 **Text:**
 
@@ -37,11 +37,11 @@ Stirling is server-side self-hosted, this is zero-server — different trust mod
 
 ## r/selfhosted
 
-**Title:** PDFRage — open-source PDF toolkit that's not just self-hosted, it's server-less (all client-side)
+**Title:** AirgapPDF — open-source PDF toolkit that's not just self-hosted, it's server-less (all client-side)
 
 **Text:**
 
-> Stirling PDF is great but still processes files on the server you host. PDFRage
+> Stirling PDF is great but still processes files on the server you host. AirgapPDF
 > is the other end of the spectrum: a static site where everything (merge, split,
 > compress, rotate, page numbers…) runs in the browser. Host it on nginx, a Pi, or
 > GitHub Pages — the "server" only ever serves static files, so there's nothing to
@@ -56,7 +56,7 @@ Stirling is server-side self-hosted, this is zero-server — different trust mod
 **Text:**
 
 > Every online PDF converter says "we delete your files after 2 hours." You can't
-> verify that. PDFRage removes the claim entirely: it's a static page, processing
+> verify that. AirgapPDF removes the claim entirely: it's a static page, processing
 > happens in-browser via pdf-lib, and you can confirm there's no upload in DevTools
 > or read the source (MIT, no build step — the code that runs is the code in the
 > repo). Works offline after first load. Self-hostable in one Docker command.
