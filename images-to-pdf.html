@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JPG/PNG to PDF converter online free — no upload | PDFRage</title>
+<meta name="description" content="Convert JPG and PNG images into a single PDF, free and private. Files never leave your browser.">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{ "imports": { "pdf-lib": "https://esm.sh/pdf-lib@1.17.1" } }</script>
+</head>
+<body>
+<header><a class="logo" href="index.html">PDF<em>Rage</em></a><a href="index.html">All tools</a></header>
+<main>
+  <h1>Images to PDF</h1>
+  <div class="tool">
+    <label>Select JPG/PNG images (order = page order)</label>
+    <input type="file" id="files" accept="image/jpeg,image/png" multiple>
+    <button id="go">Convert &amp; download</button>
+    <div id="status" class="status"></div>
+  </div>
+  <div class="ad-slot">Ad slot — 728×90</div>
+</main>
+<script type="module">
+import { imagesToPdf } from './pdf-tools.mjs';
+import { download, run } from './ui.js';
+
+document.getElementById('go').onclick = () => run(async () => {
+  const files = [...document.getElementById('files').files];
+  if (!files.length) throw new Error('Pick at least one image.');
+  const images = await Promise.all(
+    files.map(async f => ({ bytes: await f.arrayBuffer(), type: f.type }))
+  );
+  download(await imagesToPdf(images), 'images.pdf');
+});
+</script>
+</body>
+</html>

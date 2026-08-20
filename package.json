@@ -1,0 +1,15 @@
+{
+  "name": "pdfrage",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node test.mjs",
+    "serve": "python3 -m http.server 8080"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}

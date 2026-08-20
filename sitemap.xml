@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Replace pdfrage.com with the real domain before deploying -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://pdfrage.com/</loc></url>
+  <url><loc>https://pdfrage.com/merge.html</loc></url>
+  <url><loc>https://pdfrage.com/split.html</loc></url>
+  <url><loc>https://pdfrage.com/delete-pages.html</loc></url>
+  <url><loc>https://pdfrage.com/rotate.html</loc></url>
+  <url><loc>https://pdfrage.com/compress.html</loc></url>
+  <url><loc>https://pdfrage.com/images-to-pdf.html</loc></url>
+  <url><loc>https://pdfrage.com/page-numbers.html</loc></url>
+  <url><loc>https://pdfrage.com/chat.html</loc></url>
+</urlset>

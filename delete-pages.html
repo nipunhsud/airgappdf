@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delete pages from PDF online free — no upload | PDFRage</title>
+<meta name="description" content="Remove pages from a PDF without uploading it anywhere. Free, private, runs entirely in your browser.">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{ "imports": { "pdf-lib": "https://esm.sh/pdf-lib@1.17.1" } }</script>
+</head>
+<body>
+<header><a class="logo" href="index.html">PDF<em>Rage</em></a><a href="index.html">All tools</a></header>
+<main>
+  <h1>Delete PDF pages</h1>
+  <div class="tool">
+    <label>PDF file</label>
+    <input type="file" id="file" accept="application/pdf">
+    <label>Pages to delete, e.g. <code>2,5-7</code></label>
+    <input type="text" id="ranges" placeholder="2,5-7">
+    <button id="go">Delete &amp; download</button>
+    <div id="status" class="status"></div>
+  </div>
+  <div class="ad-slot">Ad slot — 728×90</div>
+</main>
+<script type="module">
+import { removePages } from './pdf-tools.mjs';
+import { download, run } from './ui.js';
+
+document.getElementById('go').onclick = () => run(async () => {
+  const f = document.getElementById('file').files[0];
+  if (!f) throw new Error('Pick a PDF.');
+  const spec = document.getElementById('ranges').value.trim();
+  if (!spec) throw new Error('Enter pages to delete.');
+  download(await removePages(await f.arrayBuffer(), spec), 'edited.pdf');
+});
+</script>
+</body>
+</html>
