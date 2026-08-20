@@ -30,7 +30,7 @@ assert.equal(merged.getPageCount(), 5);
 assert.equal(await page.textContent('#status'), 'Done — download started.');
 
 await page.goto(`${BASE}/`);
-await page.screenshot({ path: '/tmp/pdfrage-home.png', fullPage: true });
+await page.screenshot({ path: '/tmp/airgappdf-home.png', fullPage: true });
 
 await browser.close();
 console.log('browser check passed: merged 2+3 pages -> 5-page PDF downloaded');

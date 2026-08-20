@@ -1,16 +1,16 @@
-# PDFRage
+# AirgapPDF
 
 **PDF tools that never upload your files.** Merge, split, rotate, compress, delete pages,
 add page numbers, convert images, and chat with PDFs — everything runs in your browser.
 No server, no accounts, no tracking, no file ever leaves your device.
 
-![PDFRage screenshot](docs/screenshot.png)
+![AirgapPDF screenshot](docs/screenshot.png)
 
 ## Why another PDF tool?
 
 Every "free online PDF tool" uploads your document to someone else's server. For a
 resume that's annoying; for a contract, medical record, or financial statement it's a
-compliance problem. PDFRage is a static site: the PDF processing happens in your
+compliance problem. AirgapPDF is a static site: the PDF processing happens in your
 browser via [pdf-lib](https://pdf-lib.js.org/) and [pdf.js](https://mozilla.github.io/pdf.js/).
 There is no backend to trust — you can read every line of code in this repo, or
 self-host it and cut the internet entirely (tools keep working offline after first load).
@@ -30,7 +30,7 @@ It's a static site — any web server works:
 
 ```sh
 # Docker
-docker build -t pdfrage . && docker run -p 8080:80 pdfrage
+docker build -t airgappdf . && docker run -p 8080:80 airgappdf
 
 # or literally anything that serves files
 python3 -m http.server 8080
