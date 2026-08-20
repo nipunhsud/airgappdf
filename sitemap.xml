@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Replace pdfrage.com with the real domain before deploying -->
+<!-- Update to the custom domain if one is added later -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://pdfrage.com/</loc></url>
-  <url><loc>https://pdfrage.com/merge.html</loc></url>
-  <url><loc>https://pdfrage.com/split.html</loc></url>
-  <url><loc>https://pdfrage.com/delete-pages.html</loc></url>
-  <url><loc>https://pdfrage.com/rotate.html</loc></url>
-  <url><loc>https://pdfrage.com/compress.html</loc></url>
-  <url><loc>https://pdfrage.com/images-to-pdf.html</loc></url>
-  <url><loc>https://pdfrage.com/page-numbers.html</loc></url>
-  <url><loc>https://pdfrage.com/chat.html</loc></url>
+  <url><loc>https://nipunhsud.github.io/pdfrage/</loc></url>
+  <url><loc>https://nipunhsud.github.io/pdfrage/merge.html</loc></url>
+  <url><loc>https://nipunhsud.github.io/pdfrage/split.html</loc></url>
+  <url><loc>https://nipunhsud.github.io/pdfrage/delete-pages.html</loc></url>
+  <url><loc>https://nipunhsud.github.io/pdfrage/rotate.html</loc></url>
+  <url><loc>https://nipunhsud.github.io/pdfrage/compress.html</loc></url>
+  <url><loc>https://nipunhsud.github.io/pdfrage/images-to-pdf.html</loc></url>
+  <url><loc>https://nipunhsud.github.io/pdfrage/page-numbers.html</loc></url>
+  <url><loc>https://nipunhsud.github.io/pdfrage/chat.html</loc></url>
 </urlset>
