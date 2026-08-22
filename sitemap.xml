@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Update to the custom domain if one is added later -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://nipunhsud.github.io/airgappdf/</loc></url>
-  <url><loc>https://nipunhsud.github.io/airgappdf/merge.html</loc></url>
-  <url><loc>https://nipunhsud.github.io/airgappdf/split.html</loc></url>
-  <url><loc>https://nipunhsud.github.io/airgappdf/delete-pages.html</loc></url>
-  <url><loc>https://nipunhsud.github.io/airgappdf/rotate.html</loc></url>
-  <url><loc>https://nipunhsud.github.io/airgappdf/compress.html</loc></url>
-  <url><loc>https://nipunhsud.github.io/airgappdf/images-to-pdf.html</loc></url>
-  <url><loc>https://nipunhsud.github.io/airgappdf/page-numbers.html</loc></url>
-  <url><loc>https://nipunhsud.github.io/airgappdf/chat.html</loc></url>
+  <url><loc>https://airgappdf.com/</loc></url>
+  <url><loc>https://airgappdf.com/merge.html</loc></url>
+  <url><loc>https://airgappdf.com/split.html</loc></url>
+  <url><loc>https://airgappdf.com/delete-pages.html</loc></url>
+  <url><loc>https://airgappdf.com/rotate.html</loc></url>
+  <url><loc>https://airgappdf.com/compress.html</loc></url>
+  <url><loc>https://airgappdf.com/images-to-pdf.html</loc></url>
+  <url><loc>https://airgappdf.com/page-numbers.html</loc></url>
+  <url><loc>https://airgappdf.com/chat.html</loc></url>
 </urlset>
