@@ -105,3 +105,8 @@ button:hover { filter: brightness(1.08); }
 .msg.user { background: #ece6d8; }
 .msg.assistant { background: var(--card); border: 1px solid var(--line); }
 footer { text-align: center; padding: 2rem; color: #a89f8c; font-size: 0.85rem; }
+.seo-copy { margin-top: 2.5rem; }
+.seo-copy h2 { font-size: 1.3rem; border-bottom: 1px solid var(--line); padding-bottom: 0.4rem; }
+.seo-copy ol { padding-left: 1.3rem; }
+.faq h3 { font-size: 1.05rem; margin: 1.2rem 0 0.2rem; }
+.faq p { margin: 0.2rem 0 0; color: #5a5344; }
