@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rotate PDF pages online free — no upload | AirgapPDF</title>
 <meta name="description" content="Rotate all pages of a PDF by 90, 180 or 270 degrees, free and private.">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20260906b">
 <link rel="canonical" href="https://airgappdf.com/rotate.html">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#c4552d">
-<script src="ads.js" defer></script>
+<script src="ads.js?v=20260906b" defer></script>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AirgapPDF">
 <meta property="og:title" content="Rotate PDF pages online free — no upload | AirgapPDF">
@@ -62,8 +62,8 @@
 </main>
 <footer>Your files are processed locally and never sent to a server. · <a href="privacy.html">Privacy</a> · <a href="https://github.com/nipunhsud/airgappdf">Source</a></footer>
 <script type="module">
-import { rotatePdf } from './pdf-tools.mjs';
-import { download, run } from './ui.js';
+import { rotatePdf } from './pdf-tools.mjs?v=20260906b';
+import { download, run } from './ui.js?v=20260906b';
 
 document.getElementById('go').onclick = () => run(async () => {
   const f = document.getElementById('file').files[0];

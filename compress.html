@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Compress PDF online free — no upload | AirgapPDF</title>
 <meta name="description" content="Shrink PDF file size for email and upload limits, free and private. Files never leave your browser.">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20260906b">
 <link rel="canonical" href="https://airgappdf.com/compress.html">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#c4552d">
-<script src="ads.js" defer></script>
+<script src="ads.js?v=20260906b" defer></script>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AirgapPDF">
 <meta property="og:title" content="Compress PDF online free — no upload | AirgapPDF">
@@ -70,7 +70,7 @@
 // Upgrade path: Ghostscript-WASM for true object-level compression.
 import { PDFDocument } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
-import { download, run, setStatus } from './ui.js';
+import { download, run, setStatus } from './ui.js?v=20260906b';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://esm.sh/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
 

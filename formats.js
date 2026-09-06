@@ -1,6 +1,6 @@
 // Browser-only helpers shared by the conversion pages (pdf.js rendering, DOCX/ZIP output).
 // Pages that import this must map 'docx' and 'jszip' in their import map.
-import { setStatus } from './ui.js';
+import { setStatus } from './ui.js?v=20260906b';
 
 // Render every page of a pdf.js document to a canvas, one at a time.
 export async function* renderPages(src, scale = 2) {
@@ -45,7 +45,7 @@ export const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordproc
 // PDF -> Word with formatting
 // ---------------------------------------------------------------------------
 import { OPS, Util } from 'pdfjs-dist';
-import { fontInfo } from './pdf-tools.mjs';
+import { fontInfo } from './pdf-tools.mjs?v=20260906b';
 
 // { [fontName]: { bold, italic, family } } for every font used on the page.
 // Call after page.getOperatorList() so pdf.js has loaded the font objects.

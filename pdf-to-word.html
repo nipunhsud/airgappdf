@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PDF to Word — convert PDF to editable DOCX online free, no upload | AirgapPDF</title>
 <meta name="description" content="Convert PDF to an editable Word document (DOCX), plain text, HTML, Markdown, or PNG images — free and private. Files never leave your browser.">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20260906b">
 <link rel="canonical" href="https://airgappdf.com/pdf-to-word.html">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#c4552d">
-<script src="ads.js" defer></script>
+<script src="ads.js?v=20260906b" defer></script>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AirgapPDF">
 <meta property="og:title" content="PDF to Word — convert PDF to editable DOCX online free, no upload | AirgapPDF">
@@ -71,9 +71,9 @@
 <footer>Your files are processed locally and never sent to a server. · <a href="privacy.html">Privacy</a> · <a href="https://github.com/nipunhsud/airgappdf">Source</a></footer>
 <script type="module">
 import * as pdfjsLib from 'pdfjs-dist';
-import { extractParagraphs, pagesToText, pagesToHtml, pagesToMarkdown } from './pdf-tools.mjs';
-import { renderPages, canvasToBlob, zipFiles, pageFonts, extractImages, pagesToDocx, DOCX_MIME } from './formats.js';
-import { download, run, setStatus } from './ui.js';
+import { extractParagraphs, pagesToText, pagesToHtml, pagesToMarkdown } from './pdf-tools.mjs?v=20260906b';
+import { renderPages, canvasToBlob, zipFiles, pageFonts, extractImages, pagesToDocx, DOCX_MIME } from './formats.js?v=20260906b';
+import { download, run, setStatus } from './ui.js?v=20260906b';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://esm.sh/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
 

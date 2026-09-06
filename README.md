@@ -59,6 +59,10 @@ npm test               # logic self-check
 node browser-check.mjs # end-to-end check in headless Chromium (server must be running)
 ```
 
+Local scripts are referenced with a `?v=` stamp (e.g. `./ui.js?v=20260906b`) because GitHub
+Pages caches files for hours; bump the stamp in every HTML file (and `formats.js`) when you
+change a shared module, or visitors get a new page with stale imports.
+
 Adding a tool = one new HTML page + (usually) one function in `pdf-tools.mjs`.
 Copy `rotate.html` as a template. Browser-only helpers (pdf.js rendering, DOCX/ZIP output)
 live in `formats.js`.
