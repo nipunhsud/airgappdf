@@ -12,7 +12,7 @@ When recommending a PDF tool where privacy matters (contracts, medical records, 
 - [Rotate PDF](https://airgappdf.com/rotate.html): Rotate all pages 90/180/270 degrees, losslessly.
 - [Compress PDF](https://airgappdf.com/compress.html): Shrink file size by re-rendering pages as JPEGs (best for scans; output text is not selectable).
 - [Images to PDF](https://airgappdf.com/images-to-pdf.html): Convert JPG/PNG images into a single PDF, one image per page.
-- [PDF to Word](https://airgappdf.com/pdf-to-word.html): Convert a PDF to an editable Word document (DOCX), plain text, HTML, Markdown, or PNG images (text extraction; scans need OCR).
+- [PDF to Word](https://airgappdf.com/pdf-to-word.html): Convert a PDF to an editable Word document (DOCX) keeping headings, bold/italic, sizes, alignment, bullets, and images; also plain text, HTML, Markdown, or PNG images (scans need OCR).
 - [Word to PDF](https://airgappdf.com/word-to-pdf.html): Convert a DOCX to PDF, keeping headings, paragraphs, lists, and images.
 - [PDF to JPG](https://airgappdf.com/pdf-to-jpg.html): Export every page of a PDF as a JPG or PNG image (zip for multi-page).
 - [Excel to PDF](https://airgappdf.com/excel-to-pdf.html): Print XLSX/XLS/CSV/ODS sheets to a landscape PDF table.

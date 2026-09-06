@@ -300,3 +300,211 @@ export async function tableToPdf(sheets, { title } = {}) {
   if (!doc.getPageCount()) doc.addPage([W, H]);
   return doc.save();
 }
+
+// ---------------------------------------------------------------------------
+// PDF -> formatted paragraphs (used by PDF -> Word/HTML/Markdown)
+// ---------------------------------------------------------------------------
+
+const KNOWN_FAMILIES = ['Arial', 'Helvetica', 'Calibri', 'Cambria', 'Georgia', 'Verdana', 'Tahoma', 'Garamond', 'Roboto',
+  'Trebuchet', 'Courier', 'Consolas', 'Times', 'Palatino', 'Book Antiqua', 'Century', 'Segoe', 'Open Sans', 'Lato', 'Futura', 'Gill Sans'];
+
+// pdf.js font -> { bold, italic, family } for Word. name like "ABCDEF+Calibri-BoldItalic".
+export function fontInfo(name = '', generic = 'sans-serif', flags = {}) {
+  const clean = name.replace(/^[A-Z]{6}\+/, '');
+  const bold = flags.bold ?? /bold|black|heavy|semibold|demi/i.test(clean);
+  const italic = flags.italic ?? /italic|oblique/i.test(clean);
+  const squashed = clean.replace(/[\s_-]/g, '').toLowerCase();
+  let family = KNOWN_FAMILIES.find(f => squashed.startsWith(f.replace(/\s/g, '').toLowerCase())) || null;
+  if (family === 'Times') family = 'Times New Roman';
+  if (family === 'Courier') family = 'Courier New';
+  if (family === 'Trebuchet') family = 'Trebuchet MS';
+  if (family === 'Segoe') family = 'Segoe UI';
+  if (!family) family = { serif: 'Times New Roman', monospace: 'Courier New' }[generic] || 'Arial';
+  return { bold, italic, family };
+}
+
+const BULLET_RE = /^([•◦▪●‣·○■□➢➤►▶✓✔•●◦]|[-–—*])\s+/;
+
+// items: pdf.js text items; fonts: { [item.fontName]: { bold, italic, family } }.
+// Returns { blocks: [{ type:'p', y, runs, align, heading, bullet, indent, spacingAfter, lineSpacing }],
+//           margins: { left, right, top, bottom }, bodySize }
+export function extractParagraphs(items, fonts, pageWidth, pageHeight) {
+  const spans = [];
+  for (const it of items) {
+    if (!it.str || !it.str.trim()) continue;
+    const size = Math.hypot(it.transform[2], it.transform[3]) || it.height || 10;
+    const f = fonts[it.fontName] || {};
+    spans.push({ str: it.str, x: it.transform[4], y: it.transform[5], w: it.width || 0, size, bold: !!f.bold, italic: !!f.italic, family: f.family || null });
+  }
+  if (!spans.length) return { blocks: [], margins: null, bodySize: 11 };
+
+  // Lines
+  const lines = [];
+  for (const s of spans) {
+    const tol = Math.max(2, s.size * 0.3);
+    let line = lines.find(l => Math.abs(l.y - s.y) <= tol);
+    if (!line) lines.push(line = { y: s.y, spans: [] });
+    line.spans.push(s);
+  }
+  lines.sort((a, b) => b.y - a.y);
+  for (const l of lines) {
+    l.spans.sort((a, b) => a.x - b.x);
+    l.x0 = l.spans[0].x;
+    l.x1 = Math.max(...l.spans.map(s => s.x + s.w));
+    l.size = Math.max(...l.spans.map(s => s.size));
+    l.runs = [];
+    let prevEnd = null;
+    for (const s of l.spans) {
+      let text = s.str;
+      const last = l.runs[l.runs.length - 1];
+      if (prevEnd !== null && s.x - prevEnd > s.size * 0.12 && !/^\s/.test(text) && last && !/\s$/.test(last.text)) text = ' ' + text;
+      if (last && last.bold === s.bold && last.italic === s.italic && Math.abs(last.size - s.size) < 0.5 && last.family === s.family) last.text += text;
+      else l.runs.push({ text, bold: s.bold, italic: s.italic, size: s.size, family: s.family });
+      prevEnd = s.x + s.w;
+    }
+    l.runs.forEach(r => { r.text = r.text.replace(/\s+/g, ' '); });
+    l.runs[0].text = l.runs[0].text.replace(/^\s+/, '');
+    l.text = l.runs.map(r => r.text).join('').trim();
+    const m = l.text.match(BULLET_RE);
+    if (m) {
+      l.bullet = true;
+      let drop = m[0].length;
+      for (const r of l.runs) {
+        const n = Math.min(drop, r.text.length);
+        r.text = r.text.slice(n); drop -= n;
+        if (!drop) break;
+      }
+      l.runs = l.runs.filter(r => r.text);
+      if (l.runs.length) l.runs[0].text = l.runs[0].text.replace(/^\s+/, '');
+      l.text = l.text.slice(m[0].length);
+    }
+  }
+
+  // Body size = most common size weighted by characters
+  const sizeCount = new Map();
+  for (const l of lines) for (const r of l.runs) { const k = Math.round(r.size * 2) / 2; sizeCount.set(k, (sizeCount.get(k) || 0) + r.text.length); }
+  const bodySize = [...sizeCount.entries()].sort((a, b) => b[1] - a[1])[0][0];
+
+  const wide = lines.filter(l => l.text.length > 3);
+  const leftEdge = Math.min(...(wide.length ? wide : lines).map(l => l.x0));
+  const rightEdge = Math.max(...lines.map(l => l.x1));
+  const textWidth = Math.max(1, rightEdge - leftEdge);
+  const pageCenter = pageWidth / 2;
+
+  // Paragraphs
+  const paras = [];
+  let cur = null;
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i], prev = lines[i - 1];
+    let brk = !cur;
+    if (!brk) {
+      const gap = prev.y - l.y;
+      const lh = Math.max(prev.size, l.size);
+      const prevCentered = Math.abs((prev.x0 + prev.x1) / 2 - pageCenter) < pageWidth * 0.02 && prev.x0 - leftEdge > lh;
+      if (gap > lh * 1.7) brk = true;
+      else if (Math.abs(l.size - prev.size) > Math.max(1, prev.size * 0.12)) brk = true;
+      else if (l.bullet) brk = true;
+      else if (Math.abs(l.x0 - prev.x0) > lh * 1.2 && !(prev.bullet && l.x0 > prev.x0)) brk = true;
+      else if (!prevCentered && prev.x1 < rightEdge - Math.max(lh * 3, textWidth * 0.2)) brk = true;
+      else if (/[.!?:]$/.test(prev.text) && l.x0 - leftEdge > lh * 1.2) brk = true;
+    }
+    if (brk) paras.push(cur = { lines: [l] }); else cur.lines.push(l);
+  }
+
+  const blocks = paras.map((p, idx) => {
+    const first = p.lines[0], last = p.lines[p.lines.length - 1];
+    const runs = [];
+    p.lines.forEach((l, li) => {
+      l.runs.forEach((r, ri) => {
+        let text = r.text;
+        if (li > 0 && ri === 0) {
+          const prevRun = runs[runs.length - 1];
+          if (prevRun && /\S-$/.test(prevRun.text) && /^[a-z]/.test(text)) prevRun.text = prevRun.text.slice(0, -1);
+          else if (prevRun && !/\s$/.test(prevRun.text)) text = ' ' + text;
+        }
+        const prevRun = runs[runs.length - 1];
+        if (prevRun && prevRun.bold === r.bold && prevRun.italic === r.italic && Math.abs(prevRun.size - r.size) < 0.5 && prevRun.family === r.family) prevRun.text += text;
+        else runs.push({ ...r, text });
+      });
+    });
+    if (runs.length) { runs[0].text = runs[0].text.replace(/^\s+/, ''); runs[runs.length - 1].text = runs[runs.length - 1].text.replace(/\s+$/, ''); }
+    const size = Math.max(...p.lines.map(l => l.size));
+    const text = runs.map(r => r.text).join('');
+    const minX0 = Math.min(...p.lines.map(l => l.x0));
+    const centered = p.lines.every(l => Math.abs((l.x0 + l.x1) / 2 - pageCenter) < pageWidth * 0.02 && l.x0 - leftEdge > size);
+    const right = !centered && p.lines.every(l => rightEdge - l.x1 < 2 && l.x0 - leftEdge > size * 2);
+    const allBold = runs.length > 0 && runs.every(r => r.bold || !r.text.trim());
+    let heading = 0;
+    if (text.length < 120 && !first.bullet) {
+      if (size >= bodySize * 1.4) heading = 1;
+      else if (size >= bodySize * 1.15) heading = 2;
+      else if (allBold && p.lines.length === 1 && size >= bodySize * 1.05) heading = 3;
+    }
+    const gaps = p.lines.slice(1).map((l, i) => p.lines[i].y - l.y);
+    const lineSpacing = gaps.length ? Math.max(200, Math.min(480, Math.round((gaps.reduce((a, b) => a + b, 0) / gaps.length) / size * 200))) : 240;
+    const next = paras[idx + 1];
+    const lh = gaps.length ? gaps.reduce((a, b) => a + b, 0) / gaps.length : size * 1.2;
+    const spacingAfter = next ? Math.max(0, Math.min(36, Math.round(last.y - next.lines[0].y - lh))) : 0;
+    return {
+      type: 'p', y: first.y + size, runs, text, size, heading,
+      bullet: !!first.bullet,
+      align: centered ? 'center' : right ? 'right' : 'left',
+      indent: centered || right ? { left: 0, firstLine: 0 } : { left: Math.max(0, Math.round(minX0 - leftEdge)), firstLine: Math.max(0, Math.round(first.x0 - minX0)) },
+      spacingAfter, lineSpacing,
+    };
+  }).filter(b => b.runs.length);
+
+  const top = Math.max(...lines.map(l => l.y + l.size));
+  const bottom = Math.min(...lines.map(l => l.y - l.size * 0.3));
+  // Word's fonts differ slightly from the PDF's, so leave slack on the right and
+  // never let a short last page inflate the bottom margin.
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, Math.round(v)));
+  const margins = {
+    left: clamp(leftEdge, 36, 144),
+    right: clamp(pageWidth - rightEdge - 12, 24, 144),
+    top: clamp(pageHeight - top, 36, 144),
+    bottom: clamp(bottom, 36, 72),
+  };
+  return { blocks, margins, bodySize };
+}
+
+// pages: [{ blocks }] where blocks are paragraphs (and images, ignored) -> plain text / Markdown / HTML
+export function pagesToText(pages) {
+  return pages.map(pg => pg.blocks.filter(b => b.type === 'p').map(b => (b.bullet ? '• ' : '') + b.text).join('\n\n')).join('\n\n\n') + '\n';
+}
+
+export function pagesToMarkdown(pages) {
+  const esc = s => s.replace(/([*_`])/g, '\\$1');
+  const run = r => { let t = esc(r.text); if (!t.trim()) return t; const lead = t.match(/^\s*/)[0], trail = t.match(/\s*$/)[0]; t = t.trim(); if (r.bold && r.italic) t = `***${t}***`; else if (r.bold) t = `**${t}**`; else if (r.italic) t = `*${t}*`; return lead + t + trail; };
+  return pages.map(pg => {
+    let out = '';
+    pg.blocks.filter(b => b.type === 'p').forEach((b, i, arr) => {
+      const body = b.heading ? esc(b.text) : b.runs.map(run).join('');
+      if (i) out += b.bullet && arr[i - 1].bullet ? '\n' : '\n\n';
+      out += b.heading ? `${'#'.repeat(b.heading)} ${body}` : (b.bullet ? '- ' : '') + body;
+    });
+    return out;
+  }).join('\n\n---\n\n') + '\n';
+}
+
+export function pagesToHtml(pages, title = '') {
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const run = r => { let t = esc(r.text); if (r.bold) t = `<b>${t}</b>`; if (r.italic) t = `<i>${t}</i>`; return t; };
+  const body = pages.map(pg => {
+    const out = [];
+    let inList = false;
+    for (const b of pg.blocks) {
+      if (b.type !== 'p') continue;
+      if (b.bullet && !inList) { out.push('<ul>'); inList = true; }
+      if (!b.bullet && inList) { out.push('</ul>'); inList = false; }
+      const inner = b.runs.map(r => b.heading ? run({ ...r, bold: false }) : run(r)).join('');
+      const style = b.align !== 'left' ? ` style="text-align:${b.align}"` : '';
+      if (b.bullet) out.push(`<li>${inner}</li>`);
+      else if (b.heading) out.push(`<h${b.heading}${style}>${inner}</h${b.heading}>`);
+      else out.push(`<p${style}>${inner}</p>`);
+    }
+    if (inList) out.push('</ul>');
+    return out.join('\n');
+  }).join('\n<hr>\n');
+  return `<!doctype html>\n<html><head><meta charset="utf-8"><title>${esc(title)}</title></head><body>\n${body}\n</body></html>\n`;
+}

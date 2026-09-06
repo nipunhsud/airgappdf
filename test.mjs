@@ -88,3 +88,45 @@ const wide = await PDFDocument.load(await tableToPdf([{ name: '', rows: [Array.f
 assert.equal(wide.getPageCount(), 1);
 
 console.log('all checks passed');
+
+// extractParagraphs: pdf.js items -> formatted paragraphs
+{
+  const { fontInfo, extractParagraphs, pagesToMarkdown, pagesToHtml, pagesToText } = await import('./pdf-tools.mjs');
+  assert.deepEqual(fontInfo('ABCDEF+Calibri-BoldItalic', 'sans-serif'), { bold: true, italic: true, family: 'Calibri' });
+  assert.deepEqual(fontInfo('Helvetica-Bold', 'sans-serif', { bold: true, italic: false }), { bold: true, italic: false, family: 'Helvetica' });
+  assert.deepEqual(fontInfo('WeirdFont', 'serif'), { bold: false, italic: false, family: 'Times New Roman' });
+  assert.equal(fontInfo('TimesNewRomanPSMT', 'serif').family, 'Times New Roman');
+
+  const fonts = { r: { bold: false, italic: false, family: 'Arial' }, b: { bold: true, italic: false, family: 'Arial' }, i: { bold: false, italic: true, family: 'Arial' } };
+  const it = (str, x, y, size, fontName = 'r') => ({ str, width: str.length * size * 0.5, height: size, transform: [size, 0, 0, size, x, y], fontName });
+  const items = [
+    it('Big Title', 200, 700, 24, 'b'),                       // centered heading (page 612 wide -> center 306; width 108 -> 200..308) hmm see below
+    it('First paragraph line one that is long enough to', 72, 660, 12),
+    it('continues here', 72, 645, 12),
+    it('Second ', 72, 615, 12), it('bold', 114, 615, 12, 'b'), it(' words', 138, 615, 12),
+    it('• ', 72, 585, 12), it('bullet one', 84, 585, 12),
+    it('• ', 72, 570, 12), it('bullet two', 84, 570, 12),
+    it('italic', 72, 540, 12, 'i'),
+  ];
+  // make the title actually centered on a 612pt page: width = 9*12 = 108 -> x0 = 252
+  items[0].transform[4] = 252;
+  const { blocks, margins, bodySize } = extractParagraphs(items, fonts, 612, 792);
+  assert.equal(bodySize, 12);
+  assert.deepEqual(blocks.map(b => b.text), ['Big Title', 'First paragraph line one that is long enough to continues here', 'Second bold words', 'bullet one', 'bullet two', 'italic']);
+  assert.equal(blocks[0].heading, 1);
+  assert.equal(blocks[0].align, 'center');
+  assert.equal(blocks[1].align, 'left');
+  assert.deepEqual(blocks[2].runs.map(r => [r.text, r.bold]), [['Second ', false], ['bold', true], [' words', false]]);
+  assert.ok(blocks[3].bullet && blocks[4].bullet && !blocks[5].bullet);
+  assert.equal(blocks[5].runs[0].italic, true);
+  assert.equal(margins.left, 72);
+  assert.deepEqual(blocks[0].indent, { left: 0, firstLine: 0 }, 'centered text has no indent');
+  assert.ok(blocks[1].spacingAfter > 0);
+
+  const pages = [{ width: 612, height: 792, margins, blocks }];
+  assert.match(pagesToMarkdown(pages), /^# Big Title\n\nFirst paragraph[\s\S]*Second \*\*bold\*\* words\n\n- bullet one\n- bullet two\n\n\*italic\*/);
+  assert.match(pagesToHtml(pages, 't'), /<h1 style="text-align:center">Big Title<\/h1>\n<p>First[\s\S]*<ul>\n<li>bullet one<\/li>\n<li>bullet two<\/li>\n<\/ul>\n<p><i>italic<\/i><\/p>/);
+  assert.match(pagesToText(pages), /Big Title\n\nFirst paragraph line one that is long enough to continues here\n\nSecond bold words\n\n• bullet one/);
+  assert.deepEqual(extractParagraphs([], fonts, 612, 792).blocks, []);
+}
+console.log('paragraph checks passed');
