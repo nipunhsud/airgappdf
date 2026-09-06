@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Excel to PDF — convert XLSX or CSV to PDF online free, no upload | AirgapPDF</title>
+<meta name="description" content="Convert an Excel spreadsheet (XLSX, XLS, CSV, ODS) to a PDF table, free and private. The file never leaves your browser.">
+<link rel="stylesheet" href="style.css">
+<link rel="canonical" href="https://airgappdf.com/excel-to-pdf.html">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#c4552d">
+<script src="ads.js" defer></script>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AirgapPDF">
+<meta property="og:title" content="Excel to PDF — convert XLSX or CSV to PDF online free, no upload | AirgapPDF">
+<meta property="og:description" content="Convert an Excel spreadsheet (XLSX, XLS, CSV, ODS) to a PDF table, free and private. The file never leaves your browser.">
+<meta property="og:url" content="https://airgappdf.com/excel-to-pdf.html">
+<meta property="og:image" content="https://airgappdf.com/docs/screenshot.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Excel to PDF — convert XLSX or CSV to PDF online free, no upload | AirgapPDF">
+<meta name="twitter:description" content="Convert an Excel spreadsheet (XLSX, XLS, CSV, ODS) to a PDF table, free and private. The file never leaves your browser.">
+<meta name="twitter:image" content="https://airgappdf.com/docs/screenshot.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Excel to PDF — AirgapPDF","url":"https://airgappdf.com/excel-to-pdf.html","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Convert an Excel spreadsheet (XLSX, XLS, CSV, ODS) to a PDF table, free and private. The file never leaves your browser.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"AirgapPDF","url":"https://airgappdf.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AirgapPDF","item":"https://airgappdf.com/"},{"@type":"ListItem","position":2,"name":"Excel to PDF","item":"https://airgappdf.com/excel-to-pdf.html"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is my spreadsheet uploaded when I convert it?","acceptedAnswer":{"@type":"Answer","text":"No. The conversion runs entirely in your browser — the file never leaves your device."}},{"@type":"Question","name":"Does it keep formulas and formatting?","acceptedAnswer":{"@type":"Answer","text":"Cell values are printed as displayed (formula results, formatted numbers and dates). Colours, merged cells, charts, and images are not reproduced — the output is a clean, printable table."}},{"@type":"Question","name":"What if my sheet is very wide?","acceptedAnswer":{"@type":"Answer","text":"Columns are scaled to fit the page width; very wide sheets get narrow columns with wrapped text. For best results, split wide sheets or hide unneeded columns first."}}]}]}</script>
+<script type="importmap">{"imports":{"pdf-lib":"https://esm.sh/pdf-lib@1.17.1"}}</script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+<header><a class="logo" href="index.html">Airgap<em>PDF</em></a><a href="index.html">All tools</a></header>
+<main>
+  <h1>Excel to PDF</h1>
+  <div class="tool">
+    <label>Spreadsheet (.xlsx, .xls, .csv, .ods)</label>
+    <input type="file" id="file" accept=".xlsx,.xls,.xlsm,.csv,.ods,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
+    <button id="go">Convert &amp; download</button>
+    <div id="status" class="status"></div>
+    <p class="hint">Prints values as displayed. Colours, merged cells, and charts are not reproduced.</p>
+  </div>
+  <div class="ad-slot">Ad slot — 728×90</div>
+
+  <section class="seo-copy">
+    <h2>How to convert Excel to PDF — private &amp; free</h2>
+    <ol>
+      <li>Choose a spreadsheet (.xlsx, .xls, .csv, or .ods).</li>
+      <li>Click "Convert &amp; download".</li>
+      <li>Each sheet becomes a landscape table with the header row repeated on every page.</li>
+    </ol>
+  </section>
+
+  <section class="seo-copy faq">
+    <h2>Frequently asked questions</h2>
+    <h3>Is my spreadsheet uploaded when I convert it?</h3>
+    <p>No. The conversion runs entirely in your browser — the file never leaves your device.</p>
+    <h3>Does it keep formulas and formatting?</h3>
+    <p>Cell values are printed as displayed (formula results, formatted numbers and dates). Colours, merged cells, charts, and images are not reproduced — the output is a clean, printable table.</p>
+    <h3>What if my sheet is very wide?</h3>
+    <p>Columns are scaled to fit the page width; very wide sheets get narrow columns with wrapped text. For best results, split wide sheets or hide unneeded columns first.</p>
+  </section>
+</main>
+<footer>Your files are processed locally and never sent to a server. · <a href="privacy.html">Privacy</a> · <a href="https://github.com/nipunhsud/airgappdf">Source</a></footer>
+<script type="module">
+import { tableToPdf } from './pdf-tools.mjs';
+import { download, run, setStatus } from './ui.js';
+
+document.getElementById('go').onclick = () => run(async () => {
+  const f = document.getElementById('file').files[0];
+  if (!f) throw new Error('Pick a spreadsheet.');
+  setStatus('Reading spreadsheet…');
+  const wb = XLSX.read(await f.arrayBuffer(), { type: 'array', cellDates: true });
+  const sheets = wb.SheetNames.map(name => {
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, raw: false, defval: '' })
+      .map(r => r.map(c => String(c ?? '')));
+    while (rows.length && rows[rows.length - 1].every(c => !c.trim())) rows.pop();
+    const width = rows.reduce((m, r) => { let n = r.length; while (n && !r[n - 1].trim()) n--; return Math.max(m, n); }, 0);
+    return { name: wb.SheetNames.length > 1 ? name : '', rows: rows.map(r => r.slice(0, width)) };
+  }).filter(s => s.rows.length);
+  if (!sheets.length) throw new Error('No data found in this spreadsheet.');
+  setStatus('Laying out PDF…');
+  const base = f.name.replace(/\.[^.]+$/, '');
+  download(await tableToPdf(sheets, { title: base }), base + '.pdf');
+});
+</script>
+</body>
+</html>

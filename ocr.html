@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OCR PDF — make a scanned PDF searchable or convert scans to Word online free, no upload | AirgapPDF</title>
+<meta name="description" content="Recognize text in scanned PDFs and images in your browser. Get a searchable PDF, an editable Word file, or plain text — nothing is uploaded.">
+<link rel="stylesheet" href="style.css">
+<link rel="canonical" href="https://airgappdf.com/ocr.html">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#c4552d">
+<script src="ads.js" defer></script>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AirgapPDF">
+<meta property="og:title" content="OCR PDF — make a scanned PDF searchable or convert scans to Word online free, no upload | AirgapPDF">
+<meta property="og:description" content="Recognize text in scanned PDFs and images in your browser. Get a searchable PDF, an editable Word file, or plain text — nothing is uploaded.">
+<meta property="og:url" content="https://airgappdf.com/ocr.html">
+<meta property="og:image" content="https://airgappdf.com/docs/screenshot.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OCR PDF — make a scanned PDF searchable or convert scans to Word online free, no upload | AirgapPDF">
+<meta name="twitter:description" content="Recognize text in scanned PDFs and images in your browser. Get a searchable PDF, an editable Word file, or plain text — nothing is uploaded.">
+<meta name="twitter:image" content="https://airgappdf.com/docs/screenshot.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"OCR PDF — AirgapPDF","url":"https://airgappdf.com/ocr.html","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Recognize text in scanned PDFs and images in your browser. Get a searchable PDF, an editable Word file, or plain text — nothing is uploaded.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"AirgapPDF","url":"https://airgappdf.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AirgapPDF","item":"https://airgappdf.com/"},{"@type":"ListItem","position":2,"name":"OCR PDF","item":"https://airgappdf.com/ocr.html"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is my scanned document uploaded for OCR?","acceptedAnswer":{"@type":"Answer","text":"No. Text recognition runs in your browser with Tesseract compiled to WebAssembly. The engine and language data are downloaded from a CDN once; your document is never sent anywhere."}},{"@type":"Question","name":"What is a searchable PDF?","acceptedAnswer":{"@type":"Answer","text":"Your original scan, unchanged, with an invisible text layer placed over each word. It looks identical but you can search, select, and copy the text, and other tools can index it."}},{"@type":"Question","name":"How accurate is it?","acceptedAnswer":{"@type":"Answer","text":"Good on clean, straight scans at 200 DPI or higher in the selected language. Handwriting, skewed photos, and low-resolution scans reduce accuracy. Proofread the output for anything important."}}]}]}</script>
+<script type="importmap">{"imports":{"pdf-lib":"https://esm.sh/pdf-lib@1.17.1","pdfjs-dist":"https://esm.sh/pdfjs-dist@4.10.38","jszip":"https://esm.sh/jszip@3.10.1","docx":"https://esm.sh/docx@9.5.0"}}</script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+</head>
+<body>
+<header><a class="logo" href="index.html">Airgap<em>PDF</em></a><a href="index.html">All tools</a></header>
+<main>
+  <h1>OCR scanned PDF</h1>
+  <div class="tool">
+    <label>Scanned PDF or image</label>
+    <input type="file" id="file" accept="application/pdf,image/jpeg,image/png">
+    <label>Language</label>
+    <select id="lang">
+      <option value="eng" selected>English</option>
+      <option value="spa">Spanish</option>
+      <option value="fra">French</option>
+      <option value="deu">German</option>
+      <option value="ita">Italian</option>
+      <option value="por">Portuguese</option>
+      <option value="nld">Dutch</option>
+      <option value="pol">Polish</option>
+      <option value="rus">Russian</option>
+      <option value="chi_sim">Chinese (simplified)</option>
+      <option value="jpn">Japanese</option>
+      <option value="hin">Hindi</option>
+    </select>
+    <label>Output</label>
+    <select id="format">
+      <option value="pdf" selected>Searchable PDF (original + invisible text layer)</option>
+      <option value="docx">Word document (.docx)</option>
+      <option value="txt">Plain text (.txt)</option>
+    </select>
+    <button id="go">Recognize &amp; download</button>
+    <div id="status" class="status"></div>
+    <p class="hint">Runs entirely on your device. Large scans take a while — roughly a few seconds per page.</p>
+  </div>
+  <div class="ad-slot">Ad slot — 728×90</div>
+
+  <section class="seo-copy">
+    <h2>How to OCR a scanned PDF — private &amp; free</h2>
+    <ol>
+      <li>Choose a scanned PDF or a photo (JPG/PNG) of a document.</li>
+      <li>Pick the document language and the output: searchable PDF, Word, or text.</li>
+      <li>Click "Recognize &amp; download". The OCR engine downloads once (a few MB) and runs on your device.</li>
+    </ol>
+  </section>
+
+  <section class="seo-copy faq">
+    <h2>Frequently asked questions</h2>
+    <h3>Is my scanned document uploaded for OCR?</h3>
+    <p>No. Text recognition runs in your browser with Tesseract compiled to WebAssembly. The engine and language data are downloaded from a CDN once; your document is never sent anywhere.</p>
+    <h3>What is a searchable PDF?</h3>
+    <p>Your original scan, unchanged, with an invisible text layer placed over each word. It looks identical but you can search, select, and copy the text, and other tools can index it.</p>
+    <h3>How accurate is it?</h3>
+    <p>Good on clean, straight scans at 200 DPI or higher in the selected language. Handwriting, skewed photos, and low-resolution scans reduce accuracy. Proofread the output for anything important.</p>
+  </section>
+</main>
+<footer>Your files are processed locally and never sent to a server. · <a href="privacy.html">Privacy</a> · <a href="https://github.com/nipunhsud/airgappdf">Source</a></footer>
+<script type="module">
+import { PDFDocument, StandardFonts, degrees } from 'pdf-lib';
+import * as pdfjsLib from 'pdfjs-dist';
+import { sanitizeText } from './pdf-tools.mjs';
+import { renderPages, canvasToBlob, linesToDocx, DOCX_MIME } from './formats.js';
+import { download, run, setStatus } from './ui.js';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://esm.sh/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+
+let worker = null, workerLang = null;
+async function getWorker(lang) {
+  if (worker && workerLang !== lang) { await worker.terminate(); worker = null; }
+  if (!worker) {
+    setStatus('Loading OCR engine (' + lang + ')… first use downloads a few MB.');
+    worker = await Tesseract.createWorker(lang, 1, {
+      logger: m => { if (m.status === 'recognizing text') setStatus('Recognizing… ' + Math.round(m.progress * 100) + '%'); },
+    });
+    workerLang = lang;
+  }
+  return worker;
+}
+
+function textLines(data) {
+  return data.text.split('\n').map(l => l.trim()).filter(Boolean);
+}
+
+// Lay invisible text over a page so the scan becomes searchable/selectable.
+// toPdf maps OCR pixel coords -> PDF user-space; pxScale = PDF points per pixel.
+function overlayWords(page, font, words, toPdf, pxScale, rotation) {
+  for (const w of words) {
+    const t = sanitizeText(w.text, font).trim();
+    if (!t || t === '?') continue;
+    const { x0, y0, x1, y1 } = w.bbox;
+    const [x, y] = toPdf(x0, y1);
+    const heightSize = (y1 - y0) * pxScale;
+    const unit = font.widthOfTextAtSize(t, 1);
+    let size = unit ? ((x1 - x0) * pxScale) / unit : heightSize;
+    size = Math.max(heightSize * 0.5, Math.min(heightSize * 1.5, size));
+    if (!(size > 0)) continue;
+    page.drawText(t, { x, y, size, font, opacity: 0, rotate: degrees(rotation) });
+  }
+}
+
+document.getElementById('go').onclick = () => run(async () => {
+  const f = document.getElementById('file').files[0];
+  if (!f) throw new Error('Pick a scanned PDF or an image.');
+  const lang = document.getElementById('lang').value;
+  const format = document.getElementById('format').value;
+  const isPdf = f.type === 'application/pdf' || /\.pdf$/i.test(f.name);
+  const base = f.name.replace(/\.[^.]+$/, '') || 'ocr';
+  const bytes = await f.arrayBuffer();
+  const w = await getWorker(lang);
+
+  const results = []; // { lines, words, viewport|null, canvas }
+  if (isPdf) {
+    const src = await pdfjsLib.getDocument({ data: bytes.slice(0) }).promise;
+    for await (const { i, viewport, canvas } of renderPages(src, 2)) {
+      setStatus('Recognizing page ' + i + '/' + src.numPages + '…');
+      const { data } = await w.recognize(canvas);
+      results.push({ lines: textLines(data), words: data.words || [], viewport, canvas });
+    }
+  } else {
+    const bmp = await createImageBitmap(f);
+    const canvas = document.createElement('canvas');
+    canvas.width = bmp.width; canvas.height = bmp.height;
+    canvas.getContext('2d').drawImage(bmp, 0, 0);
+    setStatus('Recognizing…');
+    const { data } = await w.recognize(canvas);
+    results.push({ lines: textLines(data), words: data.words || [], viewport: null, canvas });
+  }
+  if (!results.some(r => r.lines.length)) throw new Error('No text recognized. Check the language, or try a sharper scan.');
+
+  if (format === 'txt') {
+    download(results.map(r => r.lines.join('\n')).join('\n\n'), base + '.txt', 'text/plain');
+    return;
+  }
+  if (format === 'docx') {
+    setStatus('Building Word document…');
+    download(await linesToDocx(results.map(r => r.lines)), base + '.docx', DOCX_MIME);
+    return;
+  }
+
+  setStatus('Adding text layer…');
+  let doc;
+  if (isPdf) {
+    doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
+    const font = await doc.embedFont(StandardFonts.Helvetica);
+    const pages = doc.getPages();
+    results.forEach((r, i) => {
+      const vp = r.viewport;
+      overlayWords(pages[i], font, r.words, (px, py) => vp.convertToPdfPoint(px, py), 1 / vp.scale, vp.rotation);
+    });
+  } else {
+    doc = await PDFDocument.create();
+    const font = await doc.embedFont(StandardFonts.Helvetica);
+    for (const r of results) {
+      const png = await (await canvasToBlob(r.canvas, 'image/png')).arrayBuffer();
+      const img = await doc.embedPng(png);
+      const s = Math.min(1, 612 / img.width);
+      const page = doc.addPage([img.width * s, img.height * s]);
+      page.drawImage(img, { x: 0, y: 0, width: img.width * s, height: img.height * s });
+      overlayWords(page, font, r.words, (px, py) => [px * s, img.height * s - py * s], s, 0);
+    }
+  }
+  doc.setTitle(base);
+  download(await doc.save(), base + '-searchable.pdf');
+});
+</script>
+</body>
+</html>

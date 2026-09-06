@@ -1,5 +1,5 @@
-export function download(bytes, filename) {
-  const blob = new Blob([bytes], { type: 'application/pdf' });
+export function download(bytes, filename, type = 'application/pdf') {
+  const blob = bytes instanceof Blob ? bytes : new Blob([bytes], { type });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = filename;

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF to Word — convert PDF to editable DOCX online free, no upload | AirgapPDF</title>
+<meta name="description" content="Convert PDF to an editable Word document (DOCX), plain text, HTML, Markdown, or PNG images — free and private. Files never leave your browser.">
+<link rel="stylesheet" href="style.css">
+<link rel="canonical" href="https://airgappdf.com/pdf-to-word.html">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#c4552d">
+<script src="ads.js" defer></script>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AirgapPDF">
+<meta property="og:title" content="PDF to Word — convert PDF to editable DOCX online free, no upload | AirgapPDF">
+<meta property="og:description" content="Convert PDF to an editable Word document (DOCX), plain text, HTML, Markdown, or PNG images — free and private. Files never leave your browser.">
+<meta property="og:url" content="https://airgappdf.com/pdf-to-word.html">
+<meta property="og:image" content="https://airgappdf.com/docs/screenshot.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PDF to Word — convert PDF to editable DOCX online free, no upload | AirgapPDF">
+<meta name="twitter:description" content="Convert PDF to an editable Word document (DOCX), plain text, HTML, Markdown, or PNG images — free and private. Files never leave your browser.">
+<meta name="twitter:image" content="https://airgappdf.com/docs/screenshot.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"PDF to Word — AirgapPDF","url":"https://airgappdf.com/pdf-to-word.html","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Convert PDF to an editable Word document (DOCX), plain text, HTML, Markdown, or PNG images — free and private. Files never leave your browser.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"AirgapPDF","url":"https://airgappdf.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AirgapPDF","item":"https://airgappdf.com/"},{"@type":"ListItem","position":2,"name":"PDF to Word","item":"https://airgappdf.com/pdf-to-word.html"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is my PDF uploaded when I convert it to Word?","acceptedAnswer":{"@type":"Answer","text":"No. The conversion runs entirely in your browser using pdf.js — the file never leaves your device."}},{"@type":"Question","name":"Will the Word document look exactly like my PDF?","acceptedAnswer":{"@type":"Answer","text":"The tool extracts the text into an editable DOCX, one paragraph per line with page breaks preserved. Complex layouts, tables, fonts, and images are not reproduced — it is built for getting editable text out, not pixel-perfect layout."}},{"@type":"Question","name":"Can I convert a scanned PDF to Word?","acceptedAnswer":{"@type":"Answer","text":"Not yet. Scanned PDFs are images with no text layer, so there is nothing to extract without OCR. You can still convert a scan to PNG images with this tool."}}]}]}</script>
+<script type="importmap">{ "imports": {
+  "pdf-lib": "https://esm.sh/pdf-lib@1.17.1",
+  "pdfjs-dist": "https://esm.sh/pdfjs-dist@4.10.38",
+  "docx": "https://esm.sh/docx@9.5.0",
+  "jszip": "https://esm.sh/jszip@3.10.1"
+} }</script>
+</head>
+<body>
+<header><a class="logo" href="index.html">Airgap<em>PDF</em></a><a href="index.html">All tools</a></header>
+<main>
+  <h1>PDF to Word</h1>
+  <div class="tool">
+    <label>PDF file</label>
+    <input type="file" id="file" accept="application/pdf">
+    <label>Convert to</label>
+    <select id="format">
+      <option value="docx" selected>Word document (.docx)</option>
+      <option value="txt">Plain text (.txt)</option>
+      <option value="html">HTML (.html)</option>
+      <option value="md">Markdown (.md)</option>
+      <option value="png">PNG images (.zip, one per page)</option>
+    </select>
+    <button id="go">Convert &amp; download</button>
+    <div id="status" class="status"></div>
+    <p style="font-size:0.85rem;color:#5a5344">Note: Word/text output extracts the text — complex layouts, tables, and images aren't reproduced. Scanned PDFs have no text layer (use PNG output for those).</p>
+  </div>
+  <div class="ad-slot">Ad slot — 728×90</div>
+
+  <section class="seo-copy">
+    <h2>How to convert a PDF to Word — private &amp; free</h2>
+    <ol>
+      <li>Choose a PDF file.</li>
+      <li>Pick the output format: Word (.docx), plain text, HTML, Markdown, or PNG images.</li>
+      <li>Click "Convert &amp; download" to get your editable document.</li>
+    </ol>
+  </section>
+
+  <section class="seo-copy faq">
+    <h2>Frequently asked questions</h2>
+    <h3>Is my PDF uploaded when I convert it to Word?</h3>
+    <p>No. The conversion runs entirely in your browser using pdf.js — the file never leaves your device.</p>
+    <h3>Will the Word document look exactly like my PDF?</h3>
+    <p>The tool extracts the text into an editable DOCX, one paragraph per line with page breaks preserved. Complex layouts, tables, fonts, and images are not reproduced — it is built for getting editable text out, not pixel-perfect layout.</p>
+    <h3>Can I convert a scanned PDF to Word?</h3>
+    <p>Not yet. Scanned PDFs are images with no text layer, so there is nothing to extract without OCR. You can still convert a scan to PNG images with this tool.</p>
+  </section>
+</main>
+<footer>Your files are processed locally and never sent to a server. · <a href="privacy.html">Privacy</a> · <a href="https://github.com/nipunhsud/airgappdf">Source</a></footer>
+<script type="module">
+import * as pdfjsLib from 'pdfjs-dist';
+import { groupTextLines } from './pdf-tools.mjs';
+import { renderPages, canvasToBlob, linesToDocx, zipFiles, DOCX_MIME } from './formats.js';
+import { download, run, setStatus } from './ui.js';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://esm.sh/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+
+async function extractPageTexts(src) {
+  const pages = [];
+  for (let i = 1; i <= src.numPages; i++) {
+    setStatus(`Reading page ${i}/${src.numPages}…`);
+    const page = await src.getPage(i);
+    const content = await page.getTextContent();
+    pages.push(groupTextLines(content.items));
+  }
+  if (!pages.some(lines => lines.length)) {
+    throw new Error('No text found — this looks like a scanned PDF. Use the OCR tool, or the PNG images option.');
+  }
+  return pages;
+}
+
+const escapeHtml = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const toHtml = (pages, title) => `<!doctype html>\n<html><head><meta charset="utf-8"><title>${escapeHtml(title)}</title></head><body>\n` +
+  pages.map(lines => lines.map(l => `<p>${escapeHtml(l)}</p>`).join('\n')).join('\n<hr>\n') + '\n</body></html>\n';
+const toMarkdown = pages => pages.map(lines => lines.join('\n\n')).join('\n\n---\n\n') + '\n';
+
+document.getElementById('go').onclick = () => run(async () => {
+  const f = document.getElementById('file').files[0];
+  if (!f) throw new Error('Pick a PDF.');
+  const format = document.getElementById('format').value;
+  const base = f.name.replace(/\.pdf$/i, '') || 'converted';
+  const src = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise;
+
+  if (format === 'png') {
+    const entries = [];
+    for await (const { i, canvas } of renderPages(src, 2)) {
+      entries.push({ name: `page-${String(i).padStart(3, '0')}.png`, blob: await canvasToBlob(canvas, 'image/png') });
+    }
+    download(await zipFiles(entries), `${base}-pages.zip`, 'application/zip');
+    return;
+  }
+  const pages = await extractPageTexts(src);
+  if (format === 'docx') {
+    setStatus('Building Word document…');
+    download(await linesToDocx(pages), `${base}.docx`, DOCX_MIME);
+  } else if (format === 'html') {
+    download(toHtml(pages, base), `${base}.html`, 'text/html');
+  } else if (format === 'md') {
+    download(toMarkdown(pages), `${base}.md`, 'text/markdown');
+  } else {
+    download(pages.map(lines => lines.join('\n')).join('\n\n'), `${base}.txt`, 'text/plain');
+  }
+});
+</script>
+</body>
+</html>

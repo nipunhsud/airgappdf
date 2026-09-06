@@ -1,8 +1,9 @@
 # AirgapPDF
 
 **PDF tools that never upload your files.** Merge, split, rotate, compress, delete pages,
-add page numbers, convert images, and chat with PDFs — everything runs in your browser.
-No server, no accounts, no tracking, no file ever leaves your device.
+add page numbers, convert to and from Word/Excel/images/text, OCR scans, and chat with PDFs —
+everything runs in your browser.
+No server, no accounts, no file ever leaves your device.
 
 ![AirgapPDF screenshot](docs/screenshot.png)
 
@@ -22,7 +23,16 @@ there is no "us" to route through.
 ## Tools
 
 Merge · Split (extract ranges) · Delete pages · Rotate · Compress · Images → PDF ·
+PDF → Word/text/HTML/Markdown/images · Word → PDF · Excel → PDF · Text/Markdown → PDF ·
+PDF → JPG/PNG · OCR scanned PDFs (searchable PDF / Word / text, on-device Tesseract) ·
 Page numbers · Chat with PDF (AI Q&A / summaries, BYO Claude key)
+
+## Ads
+
+airgappdf.com is ad-supported. Ads are wired in one place, `ads.js`, which fills the
+`.ad-slot` placeholders on each page; until a publisher id is set there, the slots are
+hidden, so **self-hosted copies are ad-free by default**. Ads never see your files.
+See [privacy.html](privacy.html).
 
 ## Self-host
 
@@ -50,7 +60,8 @@ node browser-check.mjs # end-to-end check in headless Chromium (server must be r
 ```
 
 Adding a tool = one new HTML page + (usually) one function in `pdf-tools.mjs`.
-Copy `rotate.html` as a template.
+Copy `rotate.html` as a template. Browser-only helpers (pdf.js rendering, DOCX/ZIP output)
+live in `formats.js`.
 
 ## License
 

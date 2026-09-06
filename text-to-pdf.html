@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Text to PDF — convert TXT or Markdown to PDF online free, no upload | AirgapPDF</title>
+<meta name="description" content="Turn a .txt or Markdown file (or pasted text) into a PDF, free and private. Nothing leaves your browser.">
+<link rel="stylesheet" href="style.css">
+<link rel="canonical" href="https://airgappdf.com/text-to-pdf.html">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#c4552d">
+<script src="ads.js" defer></script>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AirgapPDF">
+<meta property="og:title" content="Text to PDF — convert TXT or Markdown to PDF online free, no upload | AirgapPDF">
+<meta property="og:description" content="Turn a .txt or Markdown file (or pasted text) into a PDF, free and private. Nothing leaves your browser.">
+<meta property="og:url" content="https://airgappdf.com/text-to-pdf.html">
+<meta property="og:image" content="https://airgappdf.com/docs/screenshot.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Text to PDF — convert TXT or Markdown to PDF online free, no upload | AirgapPDF">
+<meta name="twitter:description" content="Turn a .txt or Markdown file (or pasted text) into a PDF, free and private. Nothing leaves your browser.">
+<meta name="twitter:image" content="https://airgappdf.com/docs/screenshot.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Text to PDF — AirgapPDF","url":"https://airgappdf.com/text-to-pdf.html","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Turn a .txt or Markdown file (or pasted text) into a PDF, free and private. Nothing leaves your browser.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"AirgapPDF","url":"https://airgappdf.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AirgapPDF","item":"https://airgappdf.com/"},{"@type":"ListItem","position":2,"name":"Text to PDF","item":"https://airgappdf.com/text-to-pdf.html"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is my text uploaded?","acceptedAnswer":{"@type":"Answer","text":"No. The conversion runs entirely in your browser — the file never leaves your device."}},{"@type":"Question","name":"What Markdown is supported?","acceptedAnswer":{"@type":"Answer","text":"Headings (#), paragraphs, bulleted and numbered lists, horizontal rules, fenced code blocks, and inline bold/italic/links (rendered as plain text). Tables and images are not rendered."}},{"@type":"Question","name":"Can I convert a Word document?","acceptedAnswer":{"@type":"Answer","text":"Use the Word to PDF tool for .docx files. This tool is for plain text and Markdown."}}]}]}</script>
+<script type="importmap">{"imports":{"pdf-lib":"https://esm.sh/pdf-lib@1.17.1"}}</script>
+</head>
+<body>
+<header><a class="logo" href="index.html">Airgap<em>PDF</em></a><a href="index.html">All tools</a></header>
+<main>
+  <h1>Text to PDF</h1>
+  <div class="tool">
+    <label>Text or Markdown file</label>
+    <input type="file" id="file" accept=".txt,.md,.markdown,text/plain,text/markdown">
+    <label>…or paste text</label>
+    <textarea id="text" placeholder="# Title&#10;&#10;Paste text or Markdown here."></textarea>
+    <label>Treat input as</label>
+    <select id="mode">
+      <option value="auto" selected>Auto (Markdown for .md files, otherwise plain text)</option>
+      <option value="text">Plain text (keep line breaks)</option>
+      <option value="markdown">Markdown</option>
+    </select>
+    <button id="go">Convert &amp; download</button>
+    <div id="status" class="status"></div>
+  </div>
+  <div class="ad-slot">Ad slot — 728×90</div>
+
+  <section class="seo-copy">
+    <h2>How to convert text or Markdown to PDF — private &amp; free</h2>
+    <ol>
+      <li>Choose a .txt or .md file, or paste text into the box.</li>
+      <li>Pick "Plain text" to keep line breaks as-is, or "Markdown" to render headings, lists, and code blocks.</li>
+      <li>Click "Convert &amp; download".</li>
+    </ol>
+  </section>
+
+  <section class="seo-copy faq">
+    <h2>Frequently asked questions</h2>
+    <h3>Is my text uploaded?</h3>
+    <p>No. The conversion runs entirely in your browser — the file never leaves your device.</p>
+    <h3>What Markdown is supported?</h3>
+    <p>Headings (#), paragraphs, bulleted and numbered lists, horizontal rules, fenced code blocks, and inline bold/italic/links (rendered as plain text). Tables and images are not rendered.</p>
+    <h3>Can I convert a Word document?</h3>
+    <p>Use the Word to PDF tool for .docx files. This tool is for plain text and Markdown.</p>
+  </section>
+</main>
+<footer>Your files are processed locally and never sent to a server. · <a href="privacy.html">Privacy</a> · <a href="https://github.com/nipunhsud/airgappdf">Source</a></footer>
+<script type="module">
+import { blocksToPdf, markdownToBlocks, textToBlocks } from './pdf-tools.mjs';
+import { download, run, setStatus } from './ui.js';
+
+document.getElementById('go').onclick = () => run(async () => {
+  const f = document.getElementById('file').files[0];
+  const text = f ? await f.text() : document.getElementById('text').value;
+  if (!text.trim()) throw new Error('Pick a file or paste some text.');
+  let mode = document.getElementById('mode').value;
+  if (mode === 'auto') mode = f && /\.(md|markdown)$/i.test(f.name) ? 'markdown' : 'text';
+  const base = f ? f.name.replace(/\.[^.]+$/, '') : 'text';
+  setStatus('Laying out PDF…');
+  const blocks = mode === 'markdown' ? markdownToBlocks(text) : textToBlocks(text);
+  download(await blocksToPdf(blocks, { title: base }), base + '.pdf');
+});
+</script>
+</body>
+</html>

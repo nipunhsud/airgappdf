@@ -1,0 +1,2 @@
+# Replace pub-XXXXXXXXXXXXXXXX with the publisher id from your AdSense account (same id as in ads.js).
+google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

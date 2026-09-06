@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word to PDF — convert DOCX to PDF online free, no upload | AirgapPDF</title>
+<meta name="description" content="Convert a Word document (DOCX) to PDF free and private. The file never leaves your browser.">
+<link rel="stylesheet" href="style.css">
+<link rel="canonical" href="https://airgappdf.com/word-to-pdf.html">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#c4552d">
+<script src="ads.js" defer></script>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AirgapPDF">
+<meta property="og:title" content="Word to PDF — convert DOCX to PDF online free, no upload | AirgapPDF">
+<meta property="og:description" content="Convert a Word document (DOCX) to PDF free and private. The file never leaves your browser.">
+<meta property="og:url" content="https://airgappdf.com/word-to-pdf.html">
+<meta property="og:image" content="https://airgappdf.com/docs/screenshot.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Word to PDF — convert DOCX to PDF online free, no upload | AirgapPDF">
+<meta name="twitter:description" content="Convert a Word document (DOCX) to PDF free and private. The file never leaves your browser.">
+<meta name="twitter:image" content="https://airgappdf.com/docs/screenshot.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Word to PDF — AirgapPDF","url":"https://airgappdf.com/word-to-pdf.html","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Convert a Word document (DOCX) to PDF free and private. The file never leaves your browser.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"isPartOf":{"@type":"WebSite","name":"AirgapPDF","url":"https://airgappdf.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AirgapPDF","item":"https://airgappdf.com/"},{"@type":"ListItem","position":2,"name":"Word to PDF","item":"https://airgappdf.com/word-to-pdf.html"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is my Word document uploaded when I convert it to PDF?","acceptedAnswer":{"@type":"Answer","text":"No. The conversion runs entirely in your browser — the file never leaves your device."}},{"@type":"Question","name":"Will the PDF look exactly like Word?","acceptedAnswer":{"@type":"Answer","text":"Not pixel-perfect. The converter keeps headings, paragraphs, lists, and inline images, laid out in a clean standard font. Custom fonts, columns, text boxes, and complex tables are simplified. For an exact replica, use Word's own \"Save as PDF\"."}},{"@type":"Question","name":"Which formats are supported?","acceptedAnswer":{"@type":"Answer","text":"DOCX (Word 2007 and later). Older .doc files must be re-saved as .docx first. For plain text or Markdown, use the Text to PDF tool."}}]}]}</script>
+<script type="importmap">{"imports":{"pdf-lib":"https://esm.sh/pdf-lib@1.17.1"}}</script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.9.1/mammoth.browser.min.js"></script>
+</head>
+<body>
+<header><a class="logo" href="index.html">Airgap<em>PDF</em></a><a href="index.html">All tools</a></header>
+<main>
+  <h1>Word to PDF</h1>
+  <div class="tool">
+    <label>Word document (.docx)</label>
+    <input type="file" id="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+    <button id="go">Convert &amp; download</button>
+    <div id="status" class="status"></div>
+    <p class="hint">Keeps text, headings, lists, and images. Fonts, columns, and complex tables are simplified.</p>
+  </div>
+  <div class="ad-slot">Ad slot — 728×90</div>
+
+  <section class="seo-copy">
+    <h2>How to convert Word to PDF — private &amp; free</h2>
+    <ol>
+      <li>Choose a .docx file.</li>
+      <li>Click "Convert &amp; download".</li>
+      <li>A PDF with the document's text, headings, lists, and images downloads.</li>
+    </ol>
+  </section>
+
+  <section class="seo-copy faq">
+    <h2>Frequently asked questions</h2>
+    <h3>Is my Word document uploaded when I convert it to PDF?</h3>
+    <p>No. The conversion runs entirely in your browser — the file never leaves your device.</p>
+    <h3>Will the PDF look exactly like Word?</h3>
+    <p>Not pixel-perfect. The converter keeps headings, paragraphs, lists, and inline images, laid out in a clean standard font. Custom fonts, columns, text boxes, and complex tables are simplified. For an exact replica, use Word's own "Save as PDF".</p>
+    <h3>Which formats are supported?</h3>
+    <p>DOCX (Word 2007 and later). Older .doc files must be re-saved as .docx first. For plain text or Markdown, use the Text to PDF tool.</p>
+  </section>
+</main>
+<footer>Your files are processed locally and never sent to a server. · <a href="privacy.html">Privacy</a> · <a href="https://github.com/nipunhsud/airgappdf">Source</a></footer>
+<script type="module">
+import { blocksToPdf } from './pdf-tools.mjs';
+import { download, run, setStatus } from './ui.js';
+
+// mammoth's HTML -> blocks for blocksToPdf (headings, paragraphs, lists, images, tables, code).
+async function htmlToBlocks(html) {
+  const body = new DOMParser().parseFromString(html, 'text/html').body;
+  const blocks = [];
+  const text = el => el.textContent.replace(/\s+/g, ' ').trim();
+  const pushImages = async el => {
+    for (const img of el.querySelectorAll('img[src^="data:"]')) {
+      const mime = img.src.slice(5, img.src.indexOf(';'));
+      if (mime !== 'image/png' && mime !== 'image/jpeg') continue;
+      blocks.push({ type: 'image', mime, bytes: await (await fetch(img.src)).arrayBuffer() });
+    }
+  };
+  const walk = async el => {
+    for (const node of el.children) {
+      const tag = node.tagName.toLowerCase();
+      if (/^h[1-6]$/.test(tag)) blocks.push({ type: 'h' + Math.min(+tag[1], 3), text: text(node) });
+      else if (tag === 'p') { const t = text(node); if (t) blocks.push({ type: 'p', text: t }); await pushImages(node); }
+      else if (tag === 'li') { blocks.push({ type: 'li', text: text(node) }); await pushImages(node); }
+      else if (tag === 'pre') blocks.push({ type: 'code', text: node.textContent });
+      else if (tag === 'tr') blocks.push({ type: 'line', text: [...node.children].map(text).join('  |  ') });
+      else if (tag === 'img') await pushImages(el);
+      else if (tag === 'hr') blocks.push({ type: 'hr' });
+      else if (tag === 'br') continue;
+      else if (node.children.length) await walk(node);
+      else { const t = text(node); if (t) blocks.push({ type: 'p', text: t }); }
+      if (tag === 'table') blocks.push({ type: 'blank' });
+    }
+  };
+  await walk(body);
+  return blocks;
+}
+
+document.getElementById('go').onclick = () => run(async () => {
+  const f = document.getElementById('file').files[0];
+  if (!f) throw new Error('Pick a .docx file.');
+  if (!/\.docx$/i.test(f.name)) throw new Error('Only .docx is supported — re-save .doc files as .docx in Word first.');
+  setStatus('Reading document…');
+  const { value: html, messages } = await mammoth.convertToHtml({ arrayBuffer: await f.arrayBuffer() });
+  if (messages.some(m => m.type === 'error')) console.warn(messages);
+  const blocks = await htmlToBlocks(html);
+  if (!blocks.length) throw new Error('No content found in this document.');
+  setStatus('Laying out PDF…');
+  const base = f.name.replace(/\.docx$/i, '');
+  download(await blocksToPdf(blocks, { title: base }), base + '.pdf');
+});
+</script>
+</body>
+</html>

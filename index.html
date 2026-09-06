@@ -9,6 +9,7 @@
 <link rel="canonical" href="https://airgappdf.com/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#c4552d">
+<script src="ads.js" defer></script>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AirgapPDF">
 <meta property="og:title" content="AirgapPDF — free private PDF tools that run in your browser">
@@ -19,7 +20,7 @@
 <meta name="twitter:title" content="AirgapPDF — free private PDF tools that run in your browser">
 <meta name="twitter:description" content="Merge, split, rotate, compress and chat with PDFs. 100% free, no upload — your files never leave your device.">
 <meta name="twitter:image" content="https://airgappdf.com/docs/screenshot.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"AirgapPDF","url":"https://airgappdf.com/","description":"Merge, split, rotate, compress and chat with PDFs. 100% free, no upload — your files never leave your device."},{"@type":"WebApplication","name":"AirgapPDF","url":"https://airgappdf.com/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Merge, split, rotate, compress and chat with PDFs. 100% free, no upload — your files never leave your device.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Merge PDFs, Split PDF, Delete pages, Rotate PDF, Compress PDF, Images to PDF, Add page numbers, Chat with PDF (AI)","screenshot":"https://airgappdf.com/docs/screenshot.png","license":"https://github.com/nipunhsud/airgappdf/blob/main/LICENSE","sameAs":["https://github.com/nipunhsud/airgappdf"]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is AirgapPDF really free?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every tool is free with no sign-up, no watermarks, and no file limits. The entire site is open source under the MIT license, so you can audit the code or self-host it."}},{"@type":"Question","name":"Are my PDF files uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. All PDF processing (merge, split, rotate, compress, delete pages, page numbers, images to PDF) happens locally in your browser using pdf-lib and pdf.js. There is no backend — your files never leave your device, and the tools keep working offline after the first load."}},{"@type":"Question","name":"How is this different from other online PDF tools?","acceptedAnswer":{"@type":"Answer","text":"Typical \"free online PDF\" sites upload your document to their servers to process it. AirgapPDF is a static site with no server-side processing at all, which matters for contracts, medical records, financial statements, and anything else you would not email to a stranger."}},{"@type":"Question","name":"What about the AI Chat with PDF tool?","acceptedAnswer":{"@type":"Answer","text":"Chat with PDF is the one tool that talks to the internet: it sends the document you choose directly from your browser to the Claude API using your own API key. Nothing routes through AirgapPDF servers, because there are none."}}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"AirgapPDF","url":"https://airgappdf.com/","description":"Merge, split, rotate, compress and chat with PDFs. 100% free, no upload — your files never leave your device."},{"@type":"WebApplication","name":"AirgapPDF","url":"https://airgappdf.com/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Merge, split, rotate, compress and chat with PDFs. 100% free, no upload — your files never leave your device.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"Merge PDFs, Split PDF, Delete pages, Rotate PDF, Compress PDF, Images to PDF, PDF to Word, Word to PDF, PDF to JPG, Excel to PDF, Text to PDF, OCR scanned PDF, Add page numbers, Chat with PDF (AI)","screenshot":"https://airgappdf.com/docs/screenshot.png","license":"https://github.com/nipunhsud/airgappdf/blob/main/LICENSE","sameAs":["https://github.com/nipunhsud/airgappdf"]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is AirgapPDF really free?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every tool is free with no sign-up, no watermarks, and no file limits. The entire site is open source under the MIT license, so you can audit the code or self-host it."}},{"@type":"Question","name":"Are my PDF files uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. All PDF processing (merge, split, rotate, compress, convert, OCR, and the rest) happens locally in your browser using pdf-lib and pdf.js. There is no backend — your files never leave your device, and the tools keep working offline after the first load."}},{"@type":"Question","name":"How is this different from other online PDF tools?","acceptedAnswer":{"@type":"Answer","text":"Typical \"free online PDF\" sites upload your document to their servers to process it. AirgapPDF is a static site with no server-side processing at all, which matters for contracts, medical records, financial statements, and anything else you would not email to a stranger."}},{"@type":"Question","name":"Does AirgapPDF show ads?","acceptedAnswer":{"@type":"Answer","text":"Yes — the site is free and supported by ads. Ads are ordinary web ads and never have access to the files you process, which stay in your browser. Self-hosted copies have no ads at all. See the privacy policy for details."}},{"@type":"Question","name":"What about the AI Chat with PDF tool?","acceptedAnswer":{"@type":"Answer","text":"Chat with PDF is the one tool that talks to the internet: it sends the document you choose directly from your browser to the Claude API using your own API key. Nothing routes through AirgapPDF servers, because there are none."}}]}]}</script>
 </head>
 <body>
 <header>
@@ -29,6 +30,9 @@
   <a href="rotate.html">Rotate</a>
   <a href="compress.html">Compress</a>
   <a href="images-to-pdf.html">Images→PDF</a>
+  <a href="pdf-to-word.html">PDF→Word</a>
+  <a href="word-to-pdf.html">Word→PDF</a>
+  <a href="ocr.html">OCR</a>
   <a href="chat.html">AI Chat</a>
 </header>
 <main>
@@ -41,6 +45,12 @@
     <a class="card" href="rotate.html"><h3>Rotate PDF</h3><p>Rotate every page 90/180/270°.</p></a>
     <a class="card" href="compress.html"><h3>Compress PDF</h3><p>Shrink file size for email &amp; upload limits.</p></a>
     <a class="card" href="images-to-pdf.html"><h3>Images to PDF</h3><p>Turn JPG/PNG photos into a PDF.</p></a>
+    <a class="card" href="pdf-to-word.html"><h3>PDF to Word</h3><p>Get editable DOCX, text, HTML, or Markdown.</p></a>
+    <a class="card" href="word-to-pdf.html"><h3>Word to PDF</h3><p>Turn a DOCX into a clean PDF.</p></a>
+    <a class="card" href="pdf-to-jpg.html"><h3>PDF to JPG</h3><p>Export every page as JPG or PNG.</p></a>
+    <a class="card" href="excel-to-pdf.html"><h3>Excel to PDF</h3><p>Print XLSX/CSV sheets to a PDF table.</p></a>
+    <a class="card" href="text-to-pdf.html"><h3>Text to PDF</h3><p>TXT or Markdown into a tidy PDF.</p></a>
+    <a class="card" href="ocr.html"><h3>OCR scanned PDF</h3><p>Make scans searchable or editable, on-device.</p></a>
     <a class="card" href="delete-pages.html"><h3>Delete pages</h3><p>Remove pages you don't need.</p></a>
     <a class="card" href="page-numbers.html"><h3>Page numbers</h3><p>Stamp "page / total" on every page.</p></a>
     <a class="card" href="chat.html"><h3>Chat with PDF</h3><p>Ask questions, get summaries — powered by Claude.</p></a>
@@ -59,13 +69,15 @@
     <h3>Is AirgapPDF really free?</h3>
     <p>Yes. Every tool is free with no sign-up, no watermarks, and no file limits. The entire site is open source under the MIT license, so you can audit the code or self-host it.</p>
     <h3>Are my PDF files uploaded to a server?</h3>
-    <p>No. All PDF processing (merge, split, rotate, compress, delete pages, page numbers, images to PDF) happens locally in your browser using pdf-lib and pdf.js. There is no backend — your files never leave your device, and the tools keep working offline after the first load.</p>
+    <p>No. All PDF processing (merge, split, rotate, compress, convert, OCR, and the rest) happens locally in your browser using pdf-lib and pdf.js. There is no backend — your files never leave your device, and the tools keep working offline after the first load.</p>
     <h3>How is this different from other online PDF tools?</h3>
     <p>Typical "free online PDF" sites upload your document to their servers to process it. AirgapPDF is a static site with no server-side processing at all, which matters for contracts, medical records, financial statements, and anything else you would not email to a stranger.</p>
+    <h3>Does AirgapPDF show ads?</h3>
+    <p>Yes — the site is free and supported by ads. Ads are ordinary web ads and never have access to the files you process, which stay in your browser. Self-hosted copies have no ads at all. See <a href="privacy.html">the privacy policy</a> for details.</p>
     <h3>What about the AI Chat with PDF tool?</h3>
     <p>Chat with PDF is the one tool that talks to the internet: it sends the document you choose directly from your browser to the Claude API using your own API key. Nothing routes through AirgapPDF servers, because there are none.</p>
   </section>
 </main>
-<footer>Your files are processed locally and never sent to a server. AI tools send only the document you choose to the Claude API.</footer>
+<footer>Your files are processed locally and never sent to a server. AI tools send only the document you choose to the Claude API. · <a href="privacy.html">Privacy</a> · <a href="https://github.com/nipunhsud/airgappdf">Source</a></footer>
 </body>
 </html>

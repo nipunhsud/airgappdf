@@ -110,3 +110,9 @@ footer { text-align: center; padding: 2rem; color: #a89f8c; font-size: 0.85rem; 
 .seo-copy ol { padding-left: 1.3rem; }
 .faq h3 { font-size: 1.05rem; margin: 1.2rem 0 0.2rem; }
 .faq p { margin: 0.2rem 0 0; color: #5a5344; }
+.ad-slot--live { border: none; padding: 0; min-height: 90px; }
+footer a { color: inherit; }
+textarea { min-height: 12rem; font-family: inherit; resize: vertical; }
+.hint { font-size: 0.85rem; color: #5a5344; margin: 0.4rem 0 0; }
+.legal h2 { font-size: 1.3rem; margin-top: 2rem; }
+.legal p, .legal li { color: #3f3a30; }
