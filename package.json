@@ -10,6 +10,6 @@
     "pdf-lib": "^1.17.1"
   },
   "devDependencies": {
-    "playwright": "^1.62.1"
+    "playwright": "^1.63.0"
   }
 }
